@@ -1,28 +1,30 @@
-# Temel .NET görüntüsünü kullan
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 2222  # SSH portu
+# Ubuntu 20.04 tabanlı bir temel imaj kullanıyoruz
+FROM ubuntu:20.04
 
-# .NET SDK görüntüsünü kullan ve uygulamayı inşa et
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["projedotv2/projedotv2.csproj", "projedotv2/"]
-RUN dotnet restore "projedotv2/projedotv2.csproj"
+# Çalışma dizinini belirleyin
+WORKDIR /app
+
+# Gerekli paketleri yükleyin
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    sudo \
+    apt-transport-https \
+    openssh-server \
+    libpq-dev && \
+    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    apt-get update && apt-get install -y dotnet-sdk-6.0 && \
+    rm -rf /var/lib/apt/lists/*
+
+# SSH için gerekli ayarları yapın
+RUN mkdir /var/run/sshd && \
+    echo 'root:Docker!' | chpasswd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+
+# Proje dosyalarını konteynıra kopyalayın
 COPY . .
-WORKDIR "/src/projedotv2"
-RUN dotnet build "projedotv2.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "projedotv2.csproj" -c Release -o /app/publish
-
-# Web ve SSH'yi başlatacak betik ile son Docker imajını oluştur
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-RUN apt-get update && apt-get install -y openssh-server
-RUN echo "root:Docker!" | chpasswd   # root şifresi
-RUN mkdir /var/run/sshd
-
-# SSH ve Web sunucusunu başlatan başlangıç betiği
-CMD service ssh start && dotnet projedotv2.dll
+# Uygulamayı çalıştırma komutları
+CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
