@@ -7,16 +7,17 @@ WORKDIR /app
 # Gerekli paketleri yükleyin
 RUN apt-get update && apt-get install -y \
     wget \
-    curl \
     sudo \
     apt-transport-https \
     openssh-server \
     libpq-dev && \
+    # Snap ile yüklü olan curl'u kaldırıyoruz
+    sudo snap remove curl && \
+    # apt ile curl'u yeniden yüklüyoruz
+    sudo apt install -y curl && \
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && apt-get install -y \
-    dotnet-sdk-6.0 \
-    dotnet-sdk-9.0 && \
+    apt-get update && apt-get install -y dotnet-sdk-6.0 && \
     rm -rf /var/lib/apt/lists/*
 
 # SSH için gerekli ayarları yapın
@@ -26,7 +27,7 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
 # DLL dosyasını doğru şekilde kopyalayın
-COPY ./bin/Debug/net6.0/projedotv2.dll .
+COPY ./bin/Debug/net6.0/projedotv2.dll ./
 
 # .NET uygulamanızı çalıştırmaya yönelik komutları belirleyin
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
