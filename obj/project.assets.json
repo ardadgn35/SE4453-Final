@@ -933,11 +933,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\davut.dogan\\Desktop\\projedot v2\\projedot.csproj",
-      "projectName": "projedot",
-      "projectPath": "C:\\Users\\davut.dogan\\Desktop\\projedot v2\\projedot.csproj",
+      "projectUniqueName": "C:\\Users\\davut.dogan\\Documents\\GitHub\\SE4453-Final\\projedotv2.csproj",
+      "projectName": "projedotv2",
+      "projectPath": "C:\\Users\\davut.dogan\\Documents\\GitHub\\SE4453-Final\\projedotv2.csproj",
       "packagesPath": "C:\\Users\\davut.dogan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\davut.dogan\\Desktop\\projedot v2\\obj\\",
+      "outputPath": "C:\\Users\\davut.dogan\\Documents\\GitHub\\SE4453-Final\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\davut.dogan\\AppData\\Roaming\\NuGet\\NuGet.Config"

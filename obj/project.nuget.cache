@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LKrcCM/FiFw=",
+  "dgSpecHash": "aZmXk3jAhj0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\davut.dogan\\Desktop\\projedot v2\\projedot.csproj",
+  "projectFilePath": "C:\\Users\\davut.dogan\\Documents\\GitHub\\SE4453-Final\\projedotv2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\davut.dogan\\.nuget\\packages\\azure.core\\1.44.1\\azure.core.1.44.1.nupkg.sha512",
     "C:\\Users\\davut.dogan\\.nuget\\packages\\azure.identity\\1.13.1\\azure.identity.1.13.1.nupkg.sha512",

@@ -23,8 +23,8 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
-# Proje dosyalarını konteynıra kopyalayın
-COPY . .
+# DLL dosyasını konteynıra kopyalayın
+COPY bin/Debug/net6.0/Projedotv2.dll .
 
 # Uygulamayı çalıştırma komutları
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
