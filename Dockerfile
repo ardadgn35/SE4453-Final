@@ -10,13 +10,8 @@ RUN apt-get update && apt-get install -y \
     sudo \
     apt-transport-https \
     openssh-server \
-    libpq-dev
-
-# Snap ile yüklü curl'u kaldırmayı deneyin, eğer snap varsa
-RUN if command -v snap &> /dev/null; then sudo snap remove curl; fi
-
-# Curl'u apt ile yükleyin
-RUN sudo apt install -y curl
+    libpq-dev \
+    curl
 
 # Dotnet için gerekli Microsoft paketini yükleyin
 RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
