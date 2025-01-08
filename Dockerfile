@@ -11,15 +11,9 @@ RUN apt-get update && apt-get install -y \
     sudo \
     apt-transport-https \
     openssh-server \
-    libpq-dev && \
+    libpq-dev \
+    dotnet-sdk-6.0 && \
     rm -rf /var/lib/apt/lists/*
-
-# .NET SDK'yı manuel olarak indirin ve kurun
-RUN wget https://download.visualstudio.microsoft.com/download/pr/ce6d4f61-bfbd-4db2-9a04-4790e028b34d/d6919fe4c74bc3c424d72a9ab8556ff5/dotnet-sdk-9.0.100-linux-x64.tar.gz && \
-    tar -xvf dotnet-sdk-9.0.100-linux-x64.tar.gz && \
-    sudo mv dotnet /usr/local/share/dotnet && \
-    sudo ln -s /usr/local/share/dotnet/dotnet /usr/local/bin/dotnet && \
-    rm dotnet-sdk-9.0.100-linux-x64.tar.gz
 
 # SSH için gerekli ayarları yapın
 RUN mkdir /var/run/sshd && \
@@ -30,8 +24,5 @@ RUN mkdir /var/run/sshd && \
 # DLL dosyasını doğru şekilde kopyalayın
 COPY ./bin/Debug/net6.0/projedotv2.dll .
 
-# Bağlantı noktalarını (portları) açın
-EXPOSE 22 80
-
 # .NET uygulamanızı çalıştırmaya yönelik komutları belirleyin
-CMD service ssh start && dotnet Projedotv2.dll
+CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
