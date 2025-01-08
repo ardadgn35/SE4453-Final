@@ -28,3 +28,5 @@ COPY bin/Debug/net6.0/Projedotv2.dll .
 
 # Uygulamayı çalıştırma komutları
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
+
+#deneme
