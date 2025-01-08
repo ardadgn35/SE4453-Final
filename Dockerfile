@@ -26,5 +26,8 @@ RUN mkdir /var/run/sshd && \
 # DLL dosyasını doğru şekilde kopyalayın
 COPY ./bin/Debug/net6.0/projedotv2.dll .
 
+# Bağlantı noktalarını (portları) açın
+EXPOSE 22 80
+
 # .NET uygulamanızı çalıştırmaya yönelik komutları belirleyin
-CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
+CMD service ssh start && dotnet Projedotv2.dll
