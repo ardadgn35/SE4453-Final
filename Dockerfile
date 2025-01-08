@@ -1,7 +1,6 @@
 # Ubuntu 20.04 tabanlı bir temel imaj kullanıyoruz
 FROM ubuntu:20.04
 
-# Çalışma dizinini belirleyin
 WORKDIR /app
 
 
