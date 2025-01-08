@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update
 
-# Gerekli .NET SDK'yı yükleyin
+# .NET SDK 6.0'ı yükleyin
 RUN apt-get install -y dotnet-sdk-6.0 && \
     rm -rf /var/lib/apt/lists/*
 
