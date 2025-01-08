@@ -24,7 +24,8 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
 # DLL dosyasını konteynıra kopyalayın
-COPY bin/Debug/net6.0/Projedotv2.dll .
+COPY bin/Debug/net9.0/Projedotv2.dll .
+
 
 # Uygulamayı çalıştırma komutları
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
