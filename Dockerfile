@@ -4,21 +4,19 @@ FROM ubuntu:20.04
 # Çalışma dizinini belirliyoruz
 WORKDIR /app
 
-# Gerekli paketleri yükleyin ve Microsoft paket kaynağını ekleyin
+# Gerekli paketleri yükleyin
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
     sudo \
     apt-transport-https \
     openssh-server \
-    libpq-dev \
-    dpkg && \
+    libpq-dev && \
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
-    apt-get update
-
-# .NET SDK 6.0'ı yükleyin
-RUN apt-get install -y dotnet-sdk-6.0 && \
+    apt-get update && apt-get install -y \
+    dotnet-sdk-6.0 \
+    dotnet-sdk-9.0 && \
     rm -rf /var/lib/apt/lists/*
 
 # SSH için gerekli ayarları yapın
