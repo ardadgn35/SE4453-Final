@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 
 WORKDIR /app
 
-# Gerekli paketleri yükleyin
+# Gerekli paketleri yükleyinn
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
