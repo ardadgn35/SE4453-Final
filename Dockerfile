@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     openssh-server \
     libpq-dev && \
-    # Snap ile yüklü olan curl'u kaldırıyoruz
-    sudo snap remove curl && \
-    # apt ile curl'u yeniden yüklüyoruz
+    # Snap kurulu olup olmadığını kontrol ediyoruz ve Snap ile yüklü curl'u kaldırıyoruz
+    if command -v snap &> /dev/null; then sudo snap remove curl; fi && \
+    # curl'u apt ile yeniden yüklüyoruz
     sudo apt install -y curl && \
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
