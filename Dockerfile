@@ -10,15 +10,24 @@ RUN apt-get update && apt-get install -y \
     sudo \
     apt-transport-https \
     openssh-server \
-    libpq-dev && \
-    # Snap kurulu olup olmadığını kontrol ediyoruz ve Snap ile yüklü curl'u kaldırıyoruz
-    if command -v snap &> /dev/null; then sudo snap remove curl; fi && \
-    # curl'u apt ile yeniden yüklüyoruz
-    sudo apt install -y curl && \
-    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
+    libpq-dev
+
+# Snap ile yüklü curl'u kaldırmayı deneyin, eğer snap varsa
+RUN if command -v snap &> /dev/null; then sudo snap remove curl; fi
+
+# Curl'u apt ile yükleyin
+RUN sudo apt install -y curl
+
+# Dotnet için gerekli Microsoft paketini yükleyin
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && apt-get install -y dotnet-sdk-6.0 && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get update
+
+# Dotnet SDK'yı yükleyin
+RUN apt-get install -y dotnet-sdk-6.0
+
+# Gereksiz dosyaları temizleyin
+RUN rm -rf /var/lib/apt/lists/*
 
 # SSH için gerekli ayarları yapın
 RUN mkdir /var/run/sshd && \
