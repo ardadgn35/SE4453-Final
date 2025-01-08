@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 # Çalışma dizinini belirliyoruz
 WORKDIR /app
 
-# Gerekli paketleri yükleyinn
+# Gerekli paketleri yükleyin
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     openssh-server \
     libpq-dev && \
-    # Microsoft paketlerini yüklemek için gerekli dosyayı indirin
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && apt-get install -y dotnet-sdk-6.0 && \
@@ -24,8 +23,8 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
-# Uygulamanın DLL dosyasını konteynıra kopyalayın
-COPY bin/Debug/net6.0/projedotv2.dll ./
+# DLL dosyasını doğru şekilde kopyalayın
+COPY ./bin/Debug/net6.0/projedotv2.dll .
 
 # .NET uygulamanızı çalıştırmaya yönelik komutları belirleyin
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]

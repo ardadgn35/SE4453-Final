@@ -43,4 +43,4 @@ jobs:
         app-name: finaldotproje
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: .
-        platform: "dotnet"   # Ensure Oryx uses the correct .NET platform
+        platform: "dotnet"   
