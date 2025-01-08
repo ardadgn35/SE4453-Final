@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 # Çalışma dizinini belirliyoruz
 WORKDIR /app
 
-# Gerekli paketleri yükleyin
+# Gerekli paketleri yükleyinn
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
