@@ -1,9 +1,10 @@
 # Ubuntu 20.04 tabanlı bir temel imaj kullanıyoruz
 FROM ubuntu:20.04
 
+# Çalışma dizinini belirleyin
 WORKDIR /app
 
-
+# Gerekli paketleri yükleyin
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -23,10 +24,7 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
 # DLL dosyasını konteynıra kopyalayın
-COPY bin/Debug/net9.0/projedotv2.dll .
-
+COPY bin/Debug/net6.0/projedotv2.dll .  # Projenizin doğru .NET sürümüyle uyuştuğundan emin olun
 
 # Uygulamayı çalıştırma komutları
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
-
-#deneme
