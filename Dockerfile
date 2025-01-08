@@ -1,7 +1,6 @@
 # Ubuntu 20.04 tabanlı bir temel imaj kullanıyoruz
 FROM ubuntu:20.04
 
-# Çalışma dizinini belirleyin
 WORKDIR /app
 
 # Gerekli paketleri yükleyin
@@ -17,6 +16,9 @@ RUN apt-get update && apt-get install -y \
     apt-get update && apt-get install -y dotnet-sdk-6.0 && \
     rm -rf /var/lib/apt/lists/*
 
+# .NET SDK 9.0 için Microsoft'un repo üzerinden yükleme
+RUN apt-get update && apt-get install -y dotnet-sdk-9.0
+
 # SSH için gerekli ayarları yapın
 RUN mkdir /var/run/sshd && \
     echo 'root:Docker!' | chpasswd && \
@@ -28,4 +30,3 @@ COPY bin/Debug/net9.0/projedotv2.dll .
 
 # Uygulamayı çalıştırma komutları
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
-
