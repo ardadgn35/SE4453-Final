@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev && \
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && apt-get install -y dotnet-sdk-9.0 && \   # .NET SDK 9.0'ı yükleyin
-    rm -rf /var/lib/apt/lists/*
+    apt-get update && apt-get install -y dotnet-sdk-9.0 && \
+    rm -rf /var/lib/apt/lists/*   # Bu satır şimdi doğru şekilde "RUN" komutunun içinde
 
 # SSH için gerekli ayarları yapın
 RUN mkdir /var/run/sshd && \
@@ -24,7 +24,7 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
 # DLL dosyasını konteynıra kopyalayın
-COPY bin/Debug/net9.0/projedotv2.dll . 
+COPY bin/Debug/net9.0/projedotv2.dll .
 
 # .NET platformu ile uygulamayı çalıştırma komutları
 CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
