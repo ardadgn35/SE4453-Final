@@ -15,12 +15,12 @@ jobs:
         uses: actions/checkout@v3
 
       # 2. Azure'a giriş yap
-      - name: Azure Login
+      - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}  # Service Principal App ID
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}  # Tenant ID
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}  # Service Principal Client Secret
 
       # 3. Docker imajını oluştur ve Azure Container Registry'ye push et
       - name: Log in to Azure Container Registry
@@ -36,13 +36,13 @@ jobs:
         run: |
           docker push container66.azurecr.io/projedotv2:latest
 
-      # 4. Azure App Service'e Docker Image'ı deploy et
-      - name: Deploy Docker Image to Azure App Service
-        uses: azure/webapps-deploy@v2
+      # 4. Azure App Service'e dağıtım yap
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-container-deploy@v2
         with:
           app-name: projedotv2 # Azure App Service ismi
           slot-name: production # Kullanılıyorsa dağıtım slot'u
-          images: container66.azurecr.io/projedotv2:latest # Azure Container Registry'deki image
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # Publish profile bilgisi
 
       # 5. Dağıtımı doğrula
       - name: Verify Deployment
