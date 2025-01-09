@@ -28,9 +28,9 @@ jobs:
         run: |
           docker push container66.azurecr.io/projedotv2:latest
 
-      # 3. Azure App Service'e Docker image'ı deploy et
+      # 3. Azure App Service'e Docker Image'ı deploy et
       - name: Deploy Docker Image to Azure App Service
-        uses: azure/webapps-container-deploy@v2
+        uses: azure/webapps-deploy@v2
         with:
           app-name: projedotv2 # Azure App Service ismi
           slot-name: production # Kullanılıyorsa dağıtım slot'u
