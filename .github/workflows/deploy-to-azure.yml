@@ -14,7 +14,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Docker imajını oluştur ve Azure Container Registry'ye push et
+      # 2. Azure'a giriş yap
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+
+      # 3. Docker imajını oluştur ve Azure Container Registry'ye push et
       - name: Log in to Azure Container Registry
         run: |
           echo ${{ secrets.ACR_PASSWORD }} | docker login container66.azurecr.io -u ${{ secrets.ACR_USERNAME }} --password-stdin
@@ -28,7 +36,7 @@ jobs:
         run: |
           docker push container66.azurecr.io/projedotv2:latest
 
-      # 3. Azure App Service'e Docker Image'ı deploy et
+      # 4. Azure App Service'e Docker Image'ı deploy et
       - name: Deploy Docker Image to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
@@ -36,7 +44,7 @@ jobs:
           slot-name: production # Kullanılıyorsa dağıtım slot'u
           images: container66.azurecr.io/projedotv2:latest # Azure Container Registry'deki image
 
-      # 4. Dağıtımı doğrula
+      # 5. Dağıtımı doğrula
       - name: Verify Deployment
         run: |
           echo "Deployment completed successfully!"
