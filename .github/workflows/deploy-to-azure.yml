@@ -28,13 +28,13 @@ jobs:
         run: |
           docker push container66.azurecr.io/projedotv2:latest
 
-      # 3. Azure App Service'e dağıtım yap
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
+      # 3. Azure App Service'e Docker image'ı deploy et
+      - name: Deploy Docker Image to Azure App Service
+        uses: azure/webapps-container-deploy@v2
         with:
           app-name: projedotv2 # Azure App Service ismi
           slot-name: production # Kullanılıyorsa dağıtım slot'u
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: container66.azurecr.io/projedotv2:latest # Azure Container Registry'deki image
 
       # 4. Dağıtımı doğrula
       - name: Verify Deployment
