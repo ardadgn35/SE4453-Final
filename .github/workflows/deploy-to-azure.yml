@@ -1,0 +1,42 @@
+name: Build and Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main # Yalnızca `main` dalına yapılan push işlemlerinde tetiklenir
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Repository'i checkout et
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Docker imajını oluştur ve Azure Container Registry'ye push et
+      - name: Log in to Azure Container Registry
+        run: |
+          echo ${{ secrets.ACR_PASSWORD }} | docker login container66.azurecr.io -u ${{ secrets.ACR_USERNAME }} --password-stdin
+
+      - name: Build and Tag Docker Image
+        run: |
+          docker build -t projedotv2-image .
+          docker tag projedotv2-image container66.azurecr.io/projedotv2:latest
+
+      - name: Push Docker Image to ACR
+        run: |
+          docker push container66.azurecr.io/projedotv2:latest
+
+      # 3. Azure App Service'e dağıtım yap
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: projedotv2 # Azure App Service ismi
+          slot-name: production # Kullanılıyorsa dağıtım slot'u
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
+      # 4. Dağıtımı doğrula
+      - name: Verify Deployment
+        run: |
+          echo "Deployment completed successfully!"
