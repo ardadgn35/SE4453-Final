@@ -1,28 +1,40 @@
-FROM ubuntu:20.04
-
+# Base image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    wget \
-    sudo \
-    apt-transport-https \
-    openssh-server \
-    libpq-dev \
-    curl
+# Install SSH server
+RUN apt-get update && apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
 
-RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update
+# Set root password for SSH
+RUN echo 'root:password123' | chpasswd
 
-RUN apt-get install -y dotnet-sdk-6.0
+# Allow root login with SSH
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
-RUN rm -rf /var/lib/apt/lists/*
+# Expose ports
+EXPOSE 22    # SSH
+EXPOSE 80    # HTTP
 
-RUN mkdir /var/run/sshd && \
-    echo 'root:Docker!' | chpasswd && \
-    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+# Copy app files
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
 
-COPY ./bin/Debug/net6.0/projedotv2.dll .
+# Copy csproj and restore dependencies
+COPY *.csproj ./
+RUN dotnet restore
 
-CMD ["/bin/bash", "-c", "service ssh start; dotnet Projedotv2.dll"]
+# Copy the rest of the files and build
+COPY . ./
+RUN dotnet publish -c Release -o /app/publish
+
+# Build runtime image
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# Start SSH and the app
+COPY init.sh /app/init.sh
+RUN chmod +x /app/init.sh
+
+ENTRYPOINT ["/app/init.sh"]
